@@ -1,45 +1,9 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.stereotype.Repository;
-import java.util.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-@Repository
-public class UserRepository {
-    private final Map<Long, User> users = new HashMap<>();
-    private Long nextId = 1L;
-
-    public List<User> findAll() {
-        return new ArrayList<>(users.values());
-    }
-
-    public Optional<User> findById(Long id) {
-        return Optional.ofNullable(users.get(id));
-    }
-
-    public Optional<User> findByEmail(String email) {
-        return users.values().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst();
-    }
-
-    public User save(User user) {
-        if (user.getId() == null) {
-            user.setId(nextId++);
-        }
-        users.put(user.getId(), user);
-        return user;
-    }
-
-    public User update(User user) {
-        users.put(user.getId(), user);
-        return user;
-    }
-
-    public void deleteById(Long id) {
-        users.remove(id);
-    }
-
-    public boolean existsById(Long id) {
-        return users.containsKey(id);
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 }

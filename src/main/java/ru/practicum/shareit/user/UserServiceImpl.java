@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,10 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        if (userDto.getEmail() == null || userDto.getEmail().isBlank()) {
-            throw new RuntimeException("Email не может быть пустым");
-        }
-        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RuntimeException("Пользователь с email " + userDto.getEmail() + " уже существует");
         }
         User user = userMapper.toEntity(userDto);
@@ -50,13 +46,13 @@ public class UserServiceImpl implements UserService {
             existing.setName(userDto.getName());
         }
         if (userDto.getEmail() != null && !userDto.getEmail().isBlank()) {
-            if (userRepository.findByEmail(userDto.getEmail()).isPresent() &&
+            if (userRepository.existsByEmail(userDto.getEmail()) &&
                     !userRepository.findByEmail(userDto.getEmail()).get().getId().equals(id)) {
                 throw new RuntimeException("Email " + userDto.getEmail() + " уже используется");
             }
             existing.setEmail(userDto.getEmail());
         }
-        userRepository.update(existing);
+        userRepository.save(existing);
         return userMapper.toDto(existing);
     }
 

@@ -5,22 +5,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = PRIVATE)
 public class ItemDto {
-    Long id;
+    private Long id;
 
     @NotBlank(message = "Название не может быть пустым")
-    String name;
+    private String name;
 
     @NotBlank(message = "Описание не может быть пустым")
-    String description;
+    private String description;
 
     @NotNull(message = "Статус доступности должен быть указан")
-    Boolean available;
+    private Boolean available;
 }
