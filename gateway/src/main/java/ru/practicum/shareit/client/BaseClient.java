@@ -4,51 +4,42 @@ import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
-import java.util.Map;
 
 public class BaseClient {
     protected final RestTemplate rest;
     protected final String serverUrl;
 
+    // Конструктор для RestTemplateBuilder (используется в клиентах)
     public BaseClient(String serverUrl, RestTemplate rest) {
         this.serverUrl = serverUrl;
         this.rest = rest;
     }
 
-    protected ResponseEntity<Object> get(String path) {
-        return get(path, null, null);
-    }
-
     protected ResponseEntity<Object> get(String path, Long userId) {
-        return get(path, userId, null);
-    }
-
-    protected ResponseEntity<Object> get(String path, Long userId, Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, userId, parameters, null);
+        return makeAndSendRequest(HttpMethod.GET, path, userId, null);
     }
 
     protected ResponseEntity<Object> post(String path, Long userId, Object body) {
-        return makeAndSendRequest(HttpMethod.POST, path, userId, null, body);
+        return makeAndSendRequest(HttpMethod.POST, path, userId, body);
+    }
+
+    protected ResponseEntity<Object> patch(String path, Long userId) {
+        return makeAndSendRequest(HttpMethod.PATCH, path, userId, null);
     }
 
     protected ResponseEntity<Object> patch(String path, Long userId, Object body) {
-        return makeAndSendRequest(HttpMethod.PATCH, path, userId, null, body);
+        return makeAndSendRequest(HttpMethod.PATCH, path, userId, body);
     }
 
     protected ResponseEntity<Object> delete(String path, Long userId) {
-        return makeAndSendRequest(HttpMethod.DELETE, path, userId, null, null);
+        return makeAndSendRequest(HttpMethod.DELETE, path, userId, null);
     }
 
-    private ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, Long userId,
-                                                      Map<String, Object> parameters, Object body) {
+    private ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, Long userId, Object body) {
         HttpEntity<Object> requestEntity = new HttpEntity<>(body, defaultHeaders(userId));
         ResponseEntity<Object> response;
         try {
-            if (parameters != null) {
-                response = rest.exchange(serverUrl + path, method, requestEntity, Object.class, parameters);
-            } else {
-                response = rest.exchange(serverUrl + path, method, requestEntity, Object.class);
-            }
+            response = rest.exchange(serverUrl + path, method, requestEntity, Object.class);
         } catch (HttpStatusCodeException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
         }

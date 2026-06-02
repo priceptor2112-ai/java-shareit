@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -17,7 +16,7 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getAll() {
-        return get(API_PREFIX);
+        return get(API_PREFIX, null);
     }
 
     public ResponseEntity<Object> getById(Long userId) {

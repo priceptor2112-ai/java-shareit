@@ -1,4 +1,21 @@
-package src.main.java.ru.practicum.shareit.user.dto;
+﻿package ru.practicum.shareit.user.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
+    private Long id;
+    
+    @NotBlank(message = "мя не может быть пустым")
+    private String name;
+    
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "екорректный формат email")
+    private String email;
 }

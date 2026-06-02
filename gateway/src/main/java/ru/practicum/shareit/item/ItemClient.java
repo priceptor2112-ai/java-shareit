@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import java.util.Map;
 
 @Service
 public class ItemClient extends BaseClient {
@@ -26,8 +25,7 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> search(Long userId, String text) {
-        Map<String, Object> parameters = Map.of("text", text);
-        return get(API_PREFIX + "/search?text={text}", userId, parameters);
+        return get(API_PREFIX + "/search?text=" + text, userId);
     }
 
     public ResponseEntity<Object> create(Long userId, ItemDto itemDto) {

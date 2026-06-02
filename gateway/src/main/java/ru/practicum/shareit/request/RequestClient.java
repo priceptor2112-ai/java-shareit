@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import java.util.Map;
 
 @Service
 public class RequestClient extends BaseClient {
@@ -25,11 +24,7 @@ public class RequestClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getAll(Long userId, Integer from, Integer size) {
-        Map<String, Object> parameters = Map.of(
-                "from", from,
-                "size", size
-        );
-        return get(API_PREFIX + "/all?from={from}&size={size}", userId, parameters);
+        return get(API_PREFIX + "/all?from=" + from + "&size=" + size, userId);
     }
 
     public ResponseEntity<Object> getById(Long userId, Long requestId) {
