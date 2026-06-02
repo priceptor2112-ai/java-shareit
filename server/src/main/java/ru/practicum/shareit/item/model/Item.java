@@ -4,29 +4,33 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Entity
 @Table(name = "items")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = PRIVATE)
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
     @Column(nullable = false)
-    private String name;
+    String name;
 
     @Column(nullable = false, length = 512)
-    private String description;
+    String description;
 
     @Column(name = "is_available", nullable = false)
-    private Boolean available;
+    Boolean available;
 
     @Column(name = "owner_id", nullable = false)
-    private Long ownerId;
+    Long ownerId;
 
     @Column(name = "request_id")
-    private Long requestId;
+    Long requestId;
 }

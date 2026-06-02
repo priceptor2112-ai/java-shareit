@@ -3,14 +3,18 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = PRIVATE)
 public class ItemDto {
-    private Long id;
-    private String name;
-    private String description;
-    private Boolean available;
-    private Long requestId;  // ← это поле должно быть
+    Long id;
+    String name;
+    String description;
+    Boolean available;
+    Long requestId;
 }
