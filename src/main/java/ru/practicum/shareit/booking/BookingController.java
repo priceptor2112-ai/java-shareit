@@ -11,7 +11,10 @@ import java.util.List;
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
 public class BookingController {
+
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private static final String BOOKING_ID_PATH = "/{bookingId}";
+
     private final BookingService bookingService;
 
     @PostMapping
@@ -20,14 +23,14 @@ public class BookingController {
         return bookingService.create(userId, requestDto);
     }
 
-    @PatchMapping("/{bookingId}")
+    @PatchMapping(BOOKING_ID_PATH)
     public BookingDto approve(@RequestHeader(USER_ID_HEADER) Long userId,
                               @PathVariable Long bookingId,
                               @RequestParam Boolean approved) {
         return bookingService.approve(userId, bookingId, approved);
     }
 
-    @GetMapping("/{bookingId}")
+    @GetMapping(BOOKING_ID_PATH)
     public BookingDto getById(@RequestHeader(USER_ID_HEADER) Long userId,
                               @PathVariable Long bookingId) {
         return bookingService.getById(userId, bookingId);

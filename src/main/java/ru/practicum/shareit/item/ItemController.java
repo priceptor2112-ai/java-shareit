@@ -13,7 +13,10 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
+
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+    private static final String ITEM_ID_PATH = "/{itemId}";
+
     private final ItemService itemService;
 
     @GetMapping
@@ -21,7 +24,7 @@ public class ItemController {
         return itemService.getItemsWithBookings(userId);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping(ITEM_ID_PATH)
     public ItemWithBookingsDto getItemById(@PathVariable Long itemId,
                                            @RequestHeader(USER_ID_HEADER) Long userId) {
         return itemService.getItemWithBookingsById(itemId, userId);
@@ -38,14 +41,14 @@ public class ItemController {
         return itemService.createItem(userId, itemDto);
     }
 
-    @PatchMapping("/{itemId}")
+    @PatchMapping(ITEM_ID_PATH)
     public ItemDto updateItem(@PathVariable Long itemId,
                               @RequestHeader(USER_ID_HEADER) Long userId,
                               @RequestBody ItemDto itemDto) {
         return itemService.updateItem(itemId, userId, itemDto);
     }
 
-    @PostMapping("/{itemId}/comment")
+    @PostMapping(ITEM_ID_PATH + "/comment")
     public CommentDto addComment(@PathVariable Long itemId,
                                  @RequestHeader(USER_ID_HEADER) Long userId,
                                  @Valid @RequestBody CommentRequestDto commentDto) {
