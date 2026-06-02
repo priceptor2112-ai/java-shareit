@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
-public class BookingDto {
+public class CommentDto {
     Long id;
-    LocalDateTime start;
-    LocalDateTime end;
-    Long itemId;
-    String itemName;
-    Long bookerId;
-    String status;
+    String text;
+    String authorName;
+    LocalDateTime created;
 }
