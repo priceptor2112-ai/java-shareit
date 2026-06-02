@@ -5,17 +5,21 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = PRIVATE)
 public class UserDto {
-    private Long id;
+    Long id;
 
     @NotBlank(message = "Имя не может быть пустым")
-    private String name;
+    String name;
 
     @NotBlank(message = "Email не может быть пустым")
     @Email(message = "Некорректный формат email")
-    private String email;
+    String email;
 }
