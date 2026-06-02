@@ -23,6 +23,12 @@ public class BookingServiceImpl implements BookingService {
     private final ItemRepository itemRepository;
     private final BookingMapper bookingMapper;
 
+    private void validateUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException(String.format("Пользователь не найден с id: %d", userId));
+        }
+    }
+
     @Override
     public BookingDto create(Long userId, BookingRequestDto requestDto) {
         validateUser(userId);
@@ -50,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto approve(Long userId, Long bookingId, Boolean approved) {
         validateUser(userId);
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
+                .orElseThrow(() -> new RuntimeException(String.format("Бронирование не найдено с id: %d", bookingId)));
 
         Item item = itemRepository.findById(booking.getItemId())
                 .orElseThrow(() -> new RuntimeException("Вещь не найдена"));
@@ -72,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto getById(Long userId, Long bookingId) {
         validateUser(userId);
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
+                .orElseThrow(() -> new RuntimeException(String.format("Бронирование не найдено с id: %d", bookingId)));
 
         Item item = itemRepository.findById(booking.getItemId())
                 .orElseThrow(() -> new RuntimeException("Вещь не найдена"));
@@ -111,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.REJECTED, sort);
                 break;
             default:
-                throw new RuntimeException("Unknown state: " + state);
+                throw new RuntimeException(String.format("Unknown state: %s", state));
         }
 
         return bookings.stream()
@@ -146,17 +152,11 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByItemOwnerIdAndStatus(userId, BookingStatus.REJECTED, sort);
                 break;
             default:
-                throw new RuntimeException("Unknown state: " + state);
+                throw new RuntimeException(String.format("Unknown state: %s", state));
         }
 
         return bookings.stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    private void validateUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("Пользователь не найден с id: " + userId);
-        }
     }
 }

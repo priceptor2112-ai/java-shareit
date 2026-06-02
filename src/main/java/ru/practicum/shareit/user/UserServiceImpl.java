@@ -23,14 +23,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден с id: " + id));
+                .orElseThrow(() -> new RuntimeException(String.format("Пользователь не найден с id: %d", id)));
         return userMapper.toDto(user);
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new RuntimeException("Пользователь с email " + userDto.getEmail() + " уже существует");
+            throw new RuntimeException(String.format("Пользователь с email %s уже существует", userDto.getEmail()));
         }
         User user = userMapper.toEntity(userDto);
         user = userRepository.save(user);
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
         User existing = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден с id: " + id));
+                .orElseThrow(() -> new RuntimeException(String.format("Пользователь не найден с id: %d", id)));
 
         if (userDto.getName() != null && !userDto.getName().isBlank()) {
             existing.setName(userDto.getName());
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getEmail() != null && !userDto.getEmail().isBlank()) {
             if (userRepository.existsByEmail(userDto.getEmail()) &&
                     !userRepository.findByEmail(userDto.getEmail()).get().getId().equals(id)) {
-                throw new RuntimeException("Email " + userDto.getEmail() + " уже используется");
+                throw new RuntimeException(String.format("Email %s уже используется", userDto.getEmail()));
             }
             existing.setEmail(userDto.getEmail());
         }

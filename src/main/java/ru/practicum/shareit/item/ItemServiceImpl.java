@@ -44,7 +44,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemWithBookingsDto getItemWithBookingsById(Long itemId, Long userId) {
         validateUser(userId);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Вещь не найдена с id: " + itemId));
+                .orElseThrow(() -> new RuntimeException(String.format("Вещь не найдена с id: %d", itemId)));
         return toItemWithBookingsDto(item, userId);
     }
 
@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(Long itemId, Long ownerId, ItemDto itemDto) {
         validateUser(ownerId);
         Item existing = itemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Вещь не найдена с id: " + itemId));
+                .orElseThrow(() -> new RuntimeException(String.format("Вещь не найдена с id: %d", itemId)));
 
         if (!existing.getOwnerId().equals(ownerId)) {
             throw new RuntimeException("Редактировать вещь может только её владелец");
@@ -121,7 +121,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(Long itemId, Long userId, CommentRequestDto commentDto) {
         validateUser(userId);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Вещь не найдена с id: " + itemId));
+                .orElseThrow(() -> new RuntimeException(String.format("Вещь не найдена с id: %d", itemId)));
 
         boolean hasBooked = bookingRepository.existsByItemIdAndBookerIdAndEndBefore(itemId, userId, LocalDateTime.now());
         if (!hasBooked) {
@@ -135,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
 
     private void validateUser(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("Пользователь не найден с id: " + userId);
+            throw new RuntimeException(String.format("Пользователь не найден с id: %d", userId));
         }
     }
 }
